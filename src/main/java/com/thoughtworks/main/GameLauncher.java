@@ -7,6 +7,8 @@ import com.thoughtworks.model.Player;
 import com.thoughtworks.model.Ship;
 import com.thoughtworks.service.PlayerService;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -20,17 +22,15 @@ public class GameLauncher {
     private PlayerService playerService;
     private InputReader inputReader;
 
-    public void configureAndStartGame() throws BattleException {
-        System.out.println("Starting Battle ship game");
-
-        Scanner scanner = new Scanner(System.in);
+    public String configureAndStartGame(File file) throws BattleException, FileNotFoundException{
+        Scanner scanner = new Scanner(file);
 
         inputReader = new InputReader(scanner);
         playerService = new PlayerService();
 
         configureGame();
         startGame();
-        concludeResult();
+        return concludeResult();
     }
 
     /**
@@ -64,44 +64,43 @@ public class GameLauncher {
 
     private void startGame(){
         //play until one player's ships are destroyed
-        while (!player1.hasLost() && !player2.hasLost()) {
+        while (!playerService.hasLost(player1) && !playerService.hasLost(player2)) {
             playerService.play(player1, player2);
-            playerService.play(player2, player1);
 
-            if(targetsFinishedAndStillNotLost()){
+            if(!playerService.hasLost(player2)){
+                playerService.play(player2, player1);
+            }
+
+            if(playerService.targetsFinishedAndStillNotLost(player1, player2)){
                 draw = true;
                 break;
             }
         }
     }
 
-    /**
-     * if targets are finished for each player and none of them has lost, it's a DRAW
-     * @return
-     */
-    private boolean targetsFinishedAndStillNotLost(){
-        return player1.getTargets().size() == 0 &&
-                player2.getTargets().size() == 0 &&
-                !player1.hasLost() &&
-                !player2.hasLost();
-    }
 
-    private void concludeResult(){
+
+    private String concludeResult(){
         String result;
         if(draw){
             result = "it's a draw";
         }else {
             StringBuilder sb = new StringBuilder();
-            sb.append(player1.hasLost()? player2.getPlayerName() : player1.getPlayerName());
+            sb.append(playerService.hasLost(player1)? player2.getPlayerName() : player1.getPlayerName());
             sb.append(" won the battle");
             result = sb.toString();
         }
-        System.out.println(result);
+        return result;
     }
 
-    public static void main(String[] args) throws BattleException{
+    public static void main(String[] args) throws BattleException, FileNotFoundException {
         GameLauncher gameLauncher = new GameLauncher();
-        gameLauncher.configureAndStartGame();
+
+        File file = new File("/Users/prashastsaxena/MyData/git_wrkspc/battleship-game/input.txt");
+
+        String result = gameLauncher.configureAndStartGame(file);
+
+        System.out.println(result);
 
         /*
          * tested the code for following inputs:

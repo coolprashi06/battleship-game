@@ -4,13 +4,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
-  <artifactId>untitled</artifactId>
-  <version>1.0-SNAPSHOT</version>
-
-  <name>untitled</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <groupId>com.thoughtworks</groupId>
+  <artifactId>battleship-game</artifactId>
+  <version>1.0</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,6 +24,7 @@
   </dependencies>
 
   <build>
+    <finalName>battleship-game</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -51,6 +48,14 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>com.thoughtworks.main.GameLauncher</mainClass>
+              </manifest>
+            </archive>
+            <outputDirectory>.</outputDirectory>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

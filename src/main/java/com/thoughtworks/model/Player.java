@@ -9,7 +9,6 @@ public class Player {
     private List<Ship> ships;
     private int[][] battleArea;
     private List<Coordinate> targets;
-    private int hitsRequiredForCompleteDestruction;
 
     public Player(String playerName, int battleAreaWidth, int battleAreaHeight, List<Ship> ships,List<Coordinate> targets) {
         this.playerName = playerName;
@@ -46,17 +45,5 @@ public class Player {
 
     public int getBattleAreaHeight() {
         return battleAreaHeight;
-    }
-
-    public boolean hasLost(){
-        return hitsRequiredForCompleteDestruction == 0;
-    }
-
-    public void decrementHitsRequiredForDestruction(){
-        hitsRequiredForCompleteDestruction -= 1;
-    }
-
-    public void setHitsRequiredForCompleteDestruction(int hitsRequiredForCompleteDestruction) {
-        this.hitsRequiredForCompleteDestruction = hitsRequiredForCompleteDestruction;
     }
 }
